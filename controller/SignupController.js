@@ -7,15 +7,15 @@ export const SignupController = async (req, res) => {
         const { fullName, email, password } = req.body;
 
         if (!fullName || !email || !password) {
-          return  res.status(400).json({ 
+            return res.status(400).json({
                 message: "Required fields are missing...",
-            }); 
+            });
         }
 
         const emailExist = await userModel.findOne({ email });
 
         if (emailExist !== null) {
-         return   res.status(404).json({
+            return res.status(404).json({
                 message: "email already exist..",
             });
         }
@@ -38,6 +38,11 @@ export const SignupController = async (req, res) => {
             saveData,
         });
     } catch (error) {
-        console.log(error);
+        console.error("Signup error:", error);
+        res.status(500).json({
+            code: "500",
+            message: "A server error has occurred",
+            error: error.message,
+        });
     }
 };
